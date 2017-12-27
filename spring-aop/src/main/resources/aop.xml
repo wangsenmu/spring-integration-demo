@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/tool"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
+
+       <bean id="personServiceBean" class="com.wsm.aop.annotation.PersonServiceBean"/>
+       <bean id="myInterceptor" class="com.wsm.aop.annotation.MyInterceptor"/>
+
+
+    <aop:aspectj-autoproxy/>
+
+     <bean id="helloWorldImpl" class="com.wsm.aop.conf.HelloWorldImpl" />
+     <bean id="helloWorldImpl2" class="com.wsm.aop.conf.HelloWorldImpl2" />
+     <bean id="timeHandler" class="com.wsm.aop.conf.TimeHandler" />
+
+     <!--如果proxy-target-class被设置为false或者这个属性被省略，那么基于接口的代理将起作用。-->
+     <aop:config>
+         <aop:aspect id="time" ref="timeHandler">
+             <aop:pointcut id="addAllMethod" expression="execution(* com.wsm.aop.conf.HelloWorld.*(..))" />
+             <aop:before method="printTime" pointcut-ref="addAllMethod" />
+             <aop:after method="printTime" pointcut-ref="addAllMethod" />
+         </aop:aspect>
+     </aop:config>
+
+</beans>
